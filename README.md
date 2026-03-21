@@ -32,29 +32,42 @@ https://docs.google.com/presentation/d/1LAG3IEvvtY3rd52WlLuxbaos3TKq7kmd/edit?us
 | H3 | Skincare accounts for more than 40% of Sephora's catalog | Sephora | category, product count |
 
 ## Analysis conclusions
-![alt text](image.png)
+
+| Hypothesis | Status | Key Data Point | Executive Takeaway |
+|---|:---:|---|---|
+| Higher price → lower ratings | ❌ Rejected | 4.07–4.36 range across all tiers | No rating risk at any price point |
+| EU has more cruelty-free products | ✅ Confirmed | — | Cruelty-free certification is an expectation at this market stage |
+| Skincare > 40% of Sephora catalog | ❌ Rejected | Skincare = 19.7% | Skincare is less crowded than expected |
+
 ---
 
 ## Project structure
 
+# 📁 Project Structure
+ 
 ```
-beauty-analysis/
+beauty_project/sql_beauty_project/
 │
 ├── data/
-│   ├── product_info.csv                              # Sephora raw data
-│   └── most_used_beauty_cosmetics_products_extended.csv  # Worldwide raw data
+│   ├── processed/
+│   │   ├── dim_category.csv
+│   │   ├── dim_country_id.csv
+│   │   └── dim_gender.csv
+│   │
+│   ├── query-results/
+│   │   ├── sephora products average rating per price.csv
+│   │   ├── sephora share of each category in the catalog.csv
+│   │   ├── sephora skincare vs everything else.csv
+│   │   ├── world dataset in EU cruelty free product.csv
+│   │   └── World products average rating per price.csv
+│   │
+│   └── raw/
+│       ├── sephora_clean.csv
+│       └── world_clean.csv
 │
-├── notebooks/
-│   └── cleaning.ipynb                                # Python data cleaning
-│
-├── sql/
-│   ├── create_tables.sql                             # Table creation queries
-│   └── analysis_queries.sql                          # Hypothesis queries
-│
-├── outputs/
-│   └── beauty_analysis_erd.html                      # Entity relationship diagram
-│
-└── README.md
+└── sql-scripts/
+    ├── create-schema.sql
+    └── query-scripts.sql
 ```
 
 ---
@@ -63,7 +76,7 @@ beauty-analysis/
 
 The project uses 4 analytical tables built on top of 2 raw tables loaded from Python.
 
-![alt text](image-1.png)
+![ER diagram](ER-diagram.png)
 
 ---
 
@@ -71,11 +84,26 @@ The project uses 4 analytical tables built on top of 2 raw tables loaded from Py
 
 | Concept | Used in |
 |---|---|
-| `GROUP BY` | H1, H2, H3, H4, H5 |
+| `GROUP BY` | H1, H2, H3 |
 | `JOIN` | H3 |
 | Subqueries | H1, H2, H5 |
 | `AVG`, `COUNT`, `SUM` | All hypotheses |
 
+---
+## How to get the data
+ 
+The datasets are sourced from Kaggle via `kagglehub`. Install it, run the download, and use the local path it returns to load your dataframes.
+ 
+```bash
+pip install kagglehub
+```
+ 
+```python
+import kagglehub
+path = kagglehub.dataset_download("nadyinky/sephora-products-and-skincare-reviews")
+print("Path to dataset files:", path)  # use this path to read your CSVs
+```
+ 
 ---
 
 ## Authors
